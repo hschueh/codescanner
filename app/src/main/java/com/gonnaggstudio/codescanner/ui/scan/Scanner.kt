@@ -19,7 +19,7 @@ import java.util.concurrent.Executor
 @Composable
 fun ScannerCompose(
     modifier: Modifier,
-    onCodeRead: (barcode: Barcode) -> Unit
+    onCodeRead: (barcodes: List<Barcode>) -> Unit
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     var cameraIsInitialized: Boolean by remember { mutableStateOf(false) }
@@ -49,8 +49,10 @@ fun ScannerCompose(
                             CameraController.COORDINATE_SYSTEM_VIEW_REFERENCED,
                             context.executor
                         ) { result ->
-                            result.getValue(barcodeScanner)?.getOrNull(0)?.let { barcode ->
-                                onCodeRead(barcode)
+                            result.getValue(barcodeScanner)?.let { barcode ->
+                                if (barcode.isNotEmpty()) {
+                                    onCodeRead(barcode)
+                                }
                             }
                         }
                     )
