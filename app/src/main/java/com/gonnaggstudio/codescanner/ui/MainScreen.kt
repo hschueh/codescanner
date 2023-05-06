@@ -22,11 +22,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.gonnaggstudio.codescanner.HomeViewModel
 import com.gonnaggstudio.codescanner.ui.scan.ScannerCompose
+import com.gonnaggstudio.codescanner.web.CustomTabUtils
 import com.google.mlkit.vision.barcode.common.Barcode
+import dagger.hilt.android.internal.migration.InjectedByHilt
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    openUrl: (Barcode) -> Unit = {}
+) {
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
@@ -61,7 +66,7 @@ fun MainScreen() {
         },
         content = {
             NavHost(navController = navController, "home") {
-                composable("home") { HomeScreen() }
+                composable("home") { HomeScreen(openUrl) }
                 composable("history") { HistoryScreen() }
             }
         }
@@ -70,6 +75,7 @@ fun MainScreen() {
 
 @Composable
 fun HomeScreen(
+    openUrl: (Barcode) -> Unit,
     homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
     val state: HomeViewModel.UiState by homeViewModel.uiState.collectAsState()
@@ -80,7 +86,11 @@ fun HomeScreen(
             HomeScreenScanning(
                 state = state as HomeViewModel.UiState.Scanning,
                 onBarcodeReceived = { homeViewModel.onAction(HomeViewModel.UiAction.OnBarcodeReceived(it)) },
-                onBarcodeClicked = { homeViewModel.onAction(HomeViewModel.UiAction.OnBarcodeClicked(it)) },
+                onBarcodeClicked = {
+                    openUrl(it)
+                    // TODO: use action and event to be neater. Also we can keep clicked record in our database.
+                    // homeViewModel.onAction(HomeViewModel.UiAction.OnBarcodeClicked(it))
+                },
             )
         }
     }

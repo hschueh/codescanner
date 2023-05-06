@@ -21,7 +21,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                 viewModelScope.launch {
                     uiState.value = withContext(Dispatchers.Default) {
                         UiState.Scanning(
-                            uiAction.list.sortedBy { it.displayValue }
+                            uiAction.list.take(DISPLAYED_URL).sortedBy { it.displayValue }
                         )
                     }
                 }
@@ -39,5 +39,9 @@ class HomeViewModel @Inject constructor() : ViewModel() {
     sealed class UiState {
         object PermissionDenied : UiState()
         data class Scanning(val list: List<Barcode>) : UiState()
+    }
+
+    companion object {
+        const val DISPLAYED_URL = 1
     }
 }
