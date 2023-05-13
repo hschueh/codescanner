@@ -16,22 +16,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.gonnaggstudio.codescanner.HomeViewModel
 import com.gonnaggstudio.codescanner.ui.scan.ScannerCompose
-import com.gonnaggstudio.codescanner.web.CustomTabUtils
+import com.gonnaggstudio.codescanner.ui.utils.hiltActivityViewModel
 import com.google.mlkit.vision.barcode.common.Barcode
-import dagger.hilt.android.internal.migration.InjectedByHilt
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @Composable
-fun MainScreen(
-    openUrl: (Barcode) -> Unit = {}
-) {
+fun MainScreen() {
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
@@ -66,7 +61,7 @@ fun MainScreen(
         },
         content = {
             NavHost(navController = navController, "home") {
-                composable("home") { HomeScreen(openUrl) }
+                composable("home") { HomeScreen() }
                 composable("history") { HistoryScreen() }
             }
         }
@@ -75,23 +70,20 @@ fun MainScreen(
 
 @Composable
 fun HomeScreen(
-    openUrl: (Barcode) -> Unit,
-    homeViewModel: HomeViewModel = hiltViewModel(),
+    homeViewModel: HomeViewModel = hiltActivityViewModel(),
 ) {
     val state: HomeViewModel.UiState by homeViewModel.uiState.collectAsState()
-    when (state) {
-        HomeViewModel.UiState.PermissionDenied -> {
-        }
+    when (val fixedState = state) {
         is HomeViewModel.UiState.Scanning -> {
             HomeScreenScanning(
-                state = state as HomeViewModel.UiState.Scanning,
+                state = fixedState,
                 onBarcodeReceived = { homeViewModel.onAction(HomeViewModel.UiAction.OnBarcodeReceived(it)) },
                 onBarcodeClicked = {
-                    openUrl(it)
-                    // TODO: use action and event to be neater. Also we can keep clicked record in our database.
-                    // homeViewModel.onAction(HomeViewModel.UiAction.OnBarcodeClicked(it))
+                    homeViewModel.onAction(HomeViewModel.UiAction.OnBarcodeClicked(it))
                 },
             )
+        }
+        is HomeViewModel.UiState.PermissionDenied -> {
         }
     }
 }

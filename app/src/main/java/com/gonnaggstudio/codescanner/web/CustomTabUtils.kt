@@ -17,7 +17,6 @@ import androidx.browser.customtabs.CustomTabsIntent
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 @Singleton
 class CustomTabUtils @Inject constructor() {
     fun launchUri(context: Context, uri: Uri) {
@@ -98,6 +97,4 @@ class CustomTabUtils @Inject constructor() {
         }
         return mutableSet
     }
-
-
 }
