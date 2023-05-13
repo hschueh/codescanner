@@ -2,6 +2,8 @@ package com.gonnaggstudio.codescanner
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gonnaggstudio.codescanner.db.dao.BarcodeDao
+import com.gonnaggstudio.codescanner.ext.toEntity
 import com.google.mlkit.vision.barcode.common.Barcode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -13,6 +15,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor() : ViewModel() {
+
+    @Inject
+    lateinit var barcodeDao: BarcodeDao
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Scanning())
     val uiState: StateFlow<UiState> = _uiState
@@ -56,6 +61,9 @@ class HomeViewModel @Inject constructor() : ViewModel() {
         _uiState.value = uiState.copy(
             barcodeToOpen = barcode
         )
+        viewModelScope.launch(Dispatchers.IO) {
+            barcodeDao.insert(barcode.toEntity())
+        }
     }
     private fun onBarcodeOpened() {
         val uiState = uiState.value as? UiState.Scanning ?: return
