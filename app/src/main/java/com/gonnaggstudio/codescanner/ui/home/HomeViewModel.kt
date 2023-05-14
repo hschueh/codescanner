@@ -1,4 +1,4 @@
-package com.gonnaggstudio.codescanner
+package com.gonnaggstudio.codescanner.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -29,7 +29,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
             when (uiAction) {
                 is UiAction.OnBarcodeReceived -> {
                     onBarcodeReceived(
-                        uiAction.list.take(DISPLAYED_URL).sortedBy { it.displayValue }
+                        uiAction.list.take(DISPLAYED_URL_COUNT).sortedBy { it.displayValue }
                     )
                 }
                 is UiAction.OnBarcodeClicked -> {
@@ -88,6 +88,6 @@ class HomeViewModel @Inject constructor() : ViewModel() {
     }
 
     companion object {
-        const val DISPLAYED_URL = 1
+        const val DISPLAYED_URL_COUNT = 1
     }
 }

@@ -13,6 +13,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import com.gonnaggstudio.codescanner.ui.MainScreen
+import com.gonnaggstudio.codescanner.ui.home.HomeViewModel
 import com.gonnaggstudio.codescanner.web.CustomTabUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
