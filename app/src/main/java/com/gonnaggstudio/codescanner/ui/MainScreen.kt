@@ -55,7 +55,7 @@ fun MainScreen(
             )
         },
         content = {
-            NavHost(navController = navController, "home") {
+            NavHost(navController = navController, MainViewModel.NAVIGATION_HOME) {
                 composable(MainViewModel.NAVIGATION_HOME) { HomeScreen() }
                 composable(MainViewModel.NAVIGATION_HISTORY) { HistoryScreen() }
                 composable(MainViewModel.NAVIGATION_SETTINGS) { SettingsScreen() }
@@ -66,15 +66,27 @@ fun MainScreen(
     // TODO: Not sure where should I put this to avoid NPE. Add default state to avoid nav before everything's settled.
     when (mainState) {
         MainViewModel.UiState.Home -> {
-            navController.navigate(MainViewModel.NAVIGATION_HOME)
+            if (navController.currentDestination?.route != MainViewModel.NAVIGATION_HOME) {
+                navController.navigate(MainViewModel.NAVIGATION_HOME) {
+                    popUpTo(MainViewModel.NAVIGATION_HOME) { inclusive = true }
+                }
+            }
+            mainViewModel.onAction(MainViewModel.UiAction.NavFinished)
         }
         MainViewModel.UiState.History -> {
-            navController.navigate(MainViewModel.NAVIGATION_HISTORY)
+            navController.navigate(MainViewModel.NAVIGATION_HISTORY) {
+                popUpTo(MainViewModel.NAVIGATION_HOME)
+            }
+            mainViewModel.onAction(MainViewModel.UiAction.NavFinished)
         }
         MainViewModel.UiState.Detail -> {
+            mainViewModel.onAction(MainViewModel.UiAction.NavFinished)
         }
         MainViewModel.UiState.Settings -> {
-            navController.navigate(MainViewModel.NAVIGATION_SETTINGS)
+            navController.navigate(MainViewModel.NAVIGATION_SETTINGS) {
+                popUpTo(MainViewModel.NAVIGATION_HOME)
+            }
+            mainViewModel.onAction(MainViewModel.UiAction.NavFinished)
         }
         else -> {}
     }

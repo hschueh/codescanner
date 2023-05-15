@@ -17,6 +17,7 @@ class MainViewModel @Inject constructor() : ViewModel() {
             UiAction.BackToHomePage -> _uiState.value = UiState.Home
             UiAction.GoToHistoryPage -> _uiState.value = UiState.History
             UiAction.GoToSettingsPage -> _uiState.value = UiState.Settings
+            UiAction.NavFinished -> _uiState.value = UiState.Default
         }
     }
 
@@ -24,6 +25,7 @@ class MainViewModel @Inject constructor() : ViewModel() {
         object BackToHomePage : UiAction()
         object GoToHistoryPage : UiAction()
         object GoToSettingsPage : UiAction()
+        object NavFinished : UiAction()
     }
 
     sealed class UiState {

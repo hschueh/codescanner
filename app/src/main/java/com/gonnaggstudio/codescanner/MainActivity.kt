@@ -13,6 +13,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import com.gonnaggstudio.codescanner.ui.MainScreen
+import com.gonnaggstudio.codescanner.ui.history.HistoryViewModel
 import com.gonnaggstudio.codescanner.ui.home.HomeViewModel
 import com.gonnaggstudio.codescanner.web.CustomTabUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     private val homeViewModel: HomeViewModel by viewModels()
+    private val historyViewModel: HistoryViewModel by viewModels()
 
     @Inject
     lateinit var customTabUtils: CustomTabUtils
@@ -48,6 +50,19 @@ class MainActivity : AppCompatActivity() {
                             homeViewModel.onAction(HomeViewModel.UiAction.BarcodeOpened)
                         }
                         else -> {}
+                    }
+                }
+            }
+        }
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                historyViewModel.uiState.collect { state ->
+                    state.barcodeToOpen?.let { url ->
+                        customTabUtils.launchUri(this@MainActivity, Uri.parse(url))
+                        historyViewModel.onAction(HistoryViewModel.UiAction.BarcodeOpened)
+                    }
+                    state.barcodeToViewDetail?.let { barcodeEntity ->
+                        historyViewModel.onAction(HistoryViewModel.UiAction.BarcodeDetailPageOpened)
                     }
                 }
             }
