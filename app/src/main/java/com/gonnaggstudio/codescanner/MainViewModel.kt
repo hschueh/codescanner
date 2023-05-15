@@ -18,6 +18,7 @@ class MainViewModel @Inject constructor() : ViewModel() {
             UiAction.GoToHistoryPage -> _uiState.value = UiState.History
             UiAction.GoToSettingsPage -> _uiState.value = UiState.Settings
             UiAction.NavFinished -> _uiState.value = UiState.Default
+            is UiAction.GoToDetailPage -> _uiState.value = UiState.Detail(uiAction.barcodeId)
         }
     }
 
@@ -25,6 +26,7 @@ class MainViewModel @Inject constructor() : ViewModel() {
         object BackToHomePage : UiAction()
         object GoToHistoryPage : UiAction()
         object GoToSettingsPage : UiAction()
+        data class GoToDetailPage(val barcodeId: Int) : UiAction()
         object NavFinished : UiAction()
     }
 
@@ -33,7 +35,7 @@ class MainViewModel @Inject constructor() : ViewModel() {
         object Home : UiState()
         object History : UiState()
         object Settings : UiState()
-        object Detail : UiState() // TODO need to add entity information I guess.
+        data class Detail(val barcodeId: Int) : UiState()
     }
 
     companion object {

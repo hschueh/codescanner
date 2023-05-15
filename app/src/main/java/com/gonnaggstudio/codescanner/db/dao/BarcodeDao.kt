@@ -17,6 +17,9 @@ interface BarcodeDao {
     @Query("SELECT * FROM $BARCODE_TABLE WHERE url = :url")
     suspend fun getBarcodeByUrl(url: String): List<BarcodeEntity>
 
+    @Query("SELECT * FROM $BARCODE_TABLE WHERE id = :id")
+    suspend fun getBarcodeById(id: Int): BarcodeEntity?
+
     @Query("SELECT * FROM $BARCODE_TABLE WHERE url LIKE :inputString")
     suspend fun getBarcodeByUrlKeyword(inputString: String): List<BarcodeEntity>
 

@@ -4,8 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.map
 import com.gonnaggstudio.codescanner.db.dao.BarcodeDao
-import com.gonnaggstudio.codescanner.db.entity.BarcodeEntity
+import com.gonnaggstudio.codescanner.model.Barcode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
@@ -22,7 +23,13 @@ class HistoryViewModel @Inject constructor() : ViewModel() {
         barcodeDao.getAllBarcodesDescPaging()
     }
 
-    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState(pager.flow))
+    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(
+        UiState(
+            pager.flow.map {
+                it.map(Barcode::fromEntity)
+            }
+        )
+    )
 
     val uiState: StateFlow<UiState> = _uiState
 
@@ -43,13 +50,17 @@ class HistoryViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    private fun navigateToBarcode(barcode: BarcodeEntity) {
-        // TODO: Handle the value in MainActivity and pass the value to MainViewModel, I guess.
+    private fun navigateToBarcode(barcode: Barcode) {
+        val state = uiState.value
+        if (barcode == state.barcodeToViewDetail) return
+        _uiState.value = state.copy(
+            barcodeToViewDetail = barcode
+        )
     }
 
     private fun navigateToBarcodeFinished() {
         val state = uiState.value
-        if (null == state.barcodeToOpen) return
+        if (null == state.barcodeToViewDetail) return
         _uiState.value = state.copy(
             barcodeToViewDetail = null
         )
@@ -75,14 +86,14 @@ class HistoryViewModel @Inject constructor() : ViewModel() {
 
     sealed class UiAction {
         data class OnBarcodeClicked(val url: String) : UiAction()
-        data class ViewBarcodeDetail(val barcode: BarcodeEntity) : UiAction()
+        data class ViewBarcodeDetail(val barcode: Barcode) : UiAction()
         object BarcodeOpened : UiAction()
         object BarcodeDetailPageOpened : UiAction()
     }
 
     data class UiState(
-        val barcodes: Flow<PagingData<BarcodeEntity>>,
+        val barcodes: Flow<PagingData<Barcode>>,
         val barcodeToOpen: String? = null,
-        val barcodeToViewDetail: BarcodeEntity? = null
+        val barcodeToViewDetail: Barcode? = null
     )
 }

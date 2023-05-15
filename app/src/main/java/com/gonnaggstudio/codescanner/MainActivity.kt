@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     private val homeViewModel: HomeViewModel by viewModels()
     private val historyViewModel: HistoryViewModel by viewModels()
+    private val mainViewModel: MainViewModel by viewModels()
 
     @Inject
     lateinit var customTabUtils: CustomTabUtils
@@ -61,7 +62,8 @@ class MainActivity : AppCompatActivity() {
                         customTabUtils.launchUri(this@MainActivity, Uri.parse(url))
                         historyViewModel.onAction(HistoryViewModel.UiAction.BarcodeOpened)
                     }
-                    state.barcodeToViewDetail?.let { barcodeEntity ->
+                    state.barcodeToViewDetail?.let { barcode ->
+                        mainViewModel.onAction(MainViewModel.UiAction.GoToDetailPage(barcode.id))
                         historyViewModel.onAction(HistoryViewModel.UiAction.BarcodeDetailPageOpened)
                     }
                 }
