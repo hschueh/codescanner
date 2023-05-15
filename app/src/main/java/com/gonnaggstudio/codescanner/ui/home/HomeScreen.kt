@@ -12,13 +12,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.gonnaggstudio.codescanner.MainViewModel
+import com.gonnaggstudio.codescanner.ext.toBarcode
 import com.gonnaggstudio.codescanner.ui.scan.ScannerCompose
 import com.gonnaggstudio.codescanner.ui.utils.hiltActivityViewModel
 import com.google.mlkit.vision.barcode.common.Barcode
 
 @Composable
 fun HomeScreen(
-    homeViewModel: HomeViewModel = hiltActivityViewModel(),
+    homeViewModel: HomeViewModel = hiltViewModel(),
+    mainViewModel: MainViewModel = hiltActivityViewModel()
 ) {
     val state: HomeViewModel.UiState by homeViewModel.uiState.collectAsState()
     when (val fixedState = state) {
@@ -27,7 +31,7 @@ fun HomeScreen(
                 state = fixedState,
                 onBarcodeReceived = { homeViewModel.onAction(HomeViewModel.UiAction.OnBarcodeReceived(it)) },
                 onBarcodeClicked = {
-                    homeViewModel.onAction(HomeViewModel.UiAction.OnBarcodeClicked(it))
+                    mainViewModel.onAction(MainViewModel.UiAction.OpenBarcodeLink(it.toBarcode()))
                 },
             )
         }

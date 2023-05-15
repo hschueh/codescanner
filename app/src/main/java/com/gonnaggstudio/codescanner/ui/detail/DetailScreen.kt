@@ -19,7 +19,7 @@ fun DetailScreen(
     val state: DetailViewModel.UiState by detailViewModel.uiState.collectAsState()
 
     LaunchedEffect(detailViewModel.detailArgs.id) {
-        detailViewModel.onAction(DetailViewModel.UiAction.BarcodeDetailPageOpened)
+        detailViewModel.onAction(DetailViewModel.UiAction.BarcodeDetailPageLaunched)
     }
     state.barcode?.let { barcode ->
         Column {

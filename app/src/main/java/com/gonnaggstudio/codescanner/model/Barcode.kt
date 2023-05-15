@@ -1,7 +1,6 @@
 package com.gonnaggstudio.codescanner.model
 
 import android.os.Parcelable
-import com.gonnaggstudio.codescanner.db.entity.BarcodeEntity
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -12,17 +11,6 @@ data class Barcode(
     val scannedAt: Long,
     val lastInteractAt: Long,
 ) : Parcelable {
-    companion object {
-        fun fromEntity(entity: BarcodeEntity): Barcode {
-            return Barcode(
-                id = entity.id,
-                barcodeValue = entity.barcodeValue,
-                url = entity.url,
-                scannedAt = entity.scannedAt,
-                lastInteractAt = entity.lastInteractAt,
-            )
-        }
-    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

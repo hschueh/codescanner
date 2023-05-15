@@ -10,13 +10,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.gonnaggstudio.codescanner.MainViewModel
 import com.gonnaggstudio.codescanner.ui.utils.BarcodeRecordRow
 import com.gonnaggstudio.codescanner.ui.utils.hiltActivityViewModel
 
 @Composable
 fun HistoryScreen(
-    historyViewModel: HistoryViewModel = hiltActivityViewModel()
+    historyViewModel: HistoryViewModel = hiltViewModel(),
+    mainViewModel: MainViewModel = hiltActivityViewModel()
 ) {
     val state: HistoryViewModel.UiState = historyViewModel.uiState.collectAsState().value
     val barcodes = state.barcodes.collectAsLazyPagingItems()
@@ -30,10 +33,10 @@ fun HistoryScreen(
                         // TODO
                     },
                     onOpen = {
-                        historyViewModel.onAction(HistoryViewModel.UiAction.OnBarcodeClicked(item.url))
+                        mainViewModel.onAction(MainViewModel.UiAction.OpenUrlLink(item.url))
                     },
                     onShare = {
-                        historyViewModel.onAction(HistoryViewModel.UiAction.ViewBarcodeDetail(item))
+                        mainViewModel.onAction(MainViewModel.UiAction.ViewBarcodeDetail(item))
                     },
                     modifier = Modifier.fillMaxWidth(),
                     label = item.url

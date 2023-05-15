@@ -2,8 +2,6 @@ package com.gonnaggstudio.codescanner.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gonnaggstudio.codescanner.db.dao.BarcodeDao
-import com.gonnaggstudio.codescanner.ext.toEntity
 import com.google.mlkit.vision.barcode.common.Barcode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -15,9 +13,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor() : ViewModel() {
-
-    @Inject
-    lateinit var barcodeDao: BarcodeDao
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Scanning())
     val uiState: StateFlow<UiState> = _uiState
@@ -31,14 +26,6 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                     onBarcodeReceived(
                         uiAction.list.take(DISPLAYED_URL_COUNT).sortedBy { it.displayValue }
                     )
-                }
-                is UiAction.OnBarcodeClicked -> {
-                    onBarcodeClicked(
-                        uiAction.barcode
-                    )
-                }
-                is UiAction.BarcodeOpened -> {
-                    onBarcodeOpened()
                 }
             }
         }
@@ -55,34 +42,13 @@ class HomeViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    private fun onBarcodeClicked(barcode: Barcode) {
-        val uiState = uiState.value as? UiState.Scanning ?: return
-        if (barcode == uiState.barcodeToOpen) return
-        _uiState.value = uiState.copy(
-            barcodeToOpen = barcode
-        )
-        viewModelScope.launch(Dispatchers.IO) {
-            barcodeDao.insert(barcode.toEntity())
-        }
-    }
-    private fun onBarcodeOpened() {
-        val uiState = uiState.value as? UiState.Scanning ?: return
-        _uiState.value = uiState.copy(
-            barcodeToOpen = null,
-            list = emptyList()
-        )
-    }
-
     sealed class UiAction {
         data class OnBarcodeReceived(val list: List<Barcode>) : UiAction()
-        data class OnBarcodeClicked(val barcode: Barcode) : UiAction()
-        object BarcodeOpened : UiAction()
     }
 
     sealed class UiState {
         object PermissionDenied : UiState()
         data class Scanning(
-            val barcodeToOpen: Barcode? = null,
             val list: List<Barcode> = emptyList()
         ) : UiState()
     }

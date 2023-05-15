@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gonnaggstudio.codescanner.db.dao.BarcodeDao
+import com.gonnaggstudio.codescanner.ext.toBarcode
 import com.gonnaggstudio.codescanner.model.Barcode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -28,48 +29,21 @@ class DetailViewModel @Inject constructor(
 
     fun onAction(uiAction: UiAction) {
         when (uiAction) {
-            is UiAction.OnBarcodeClicked -> {
-                onBarcodeClicked(uiAction.url)
-            }
-            UiAction.BarcodeOpened -> {
-                onBarcodeOpened()
-            }
-            UiAction.BarcodeDetailPageOpened -> {
+            UiAction.BarcodeDetailPageLaunched -> {
                 viewModelScope.launch {
-                    val barcode = barcodeDao.getBarcodeById(detailArgs.id)?.let(Barcode::fromEntity)
+                    val barcode = barcodeDao.getBarcodeById(detailArgs.id)?.toBarcode()
                     _uiState.value = _uiState.value.copy(barcode = barcode)
                 }
             }
         }
     }
 
-    private fun onBarcodeClicked(url: String) {
-        val state = uiState.value
-        if (url == state.barcodeToOpen) return
-        _uiState.value = state.copy(
-            barcodeToOpen = url
-        )
-        /* TODO: find and update lastInteractAt
-        viewModelScope.launch(Dispatchers.IO) {
-        }
-         */
-    }
-
-    private fun onBarcodeOpened() {
-        _uiState.value = uiState.value.copy(
-            barcodeToOpen = null
-        )
-    }
-
     sealed class UiAction {
-        data class OnBarcodeClicked(val url: String) : UiAction()
-        object BarcodeOpened : UiAction()
-        object BarcodeDetailPageOpened : UiAction()
+        object BarcodeDetailPageLaunched : UiAction()
     }
 
     data class UiState(
-        val barcode: Barcode? = null,
-        val barcodeToOpen: String? = null,
+        val barcode: Barcode? = null
     )
 }
 
