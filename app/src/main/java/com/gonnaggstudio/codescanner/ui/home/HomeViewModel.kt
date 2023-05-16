@@ -27,6 +27,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                         uiAction.list.take(DISPLAYED_URL_COUNT).sortedBy { it.displayValue }
                     )
                 }
+                UiAction.OnTorchClicked -> toggleTorch()
             }
         }
     }
@@ -42,14 +43,27 @@ class HomeViewModel @Inject constructor() : ViewModel() {
         }
     }
 
+    private fun toggleTorch() {
+        val uiState = uiState.value as? UiState.Scanning ?: return
+        viewModelScope.launch {
+            _uiState.value = withContext(Dispatchers.Default) {
+                uiState.copy(
+                    isTorchEnabled = !uiState.isTorchEnabled
+                )
+            }
+        }
+    }
+
     sealed class UiAction {
         data class OnBarcodeReceived(val list: List<Barcode>) : UiAction()
+        object OnTorchClicked : UiAction()
     }
 
     sealed class UiState {
         object PermissionDenied : UiState()
         data class Scanning(
-            val list: List<Barcode> = emptyList()
+            val list: List<Barcode> = emptyList(),
+            val isTorchEnabled: Boolean = false
         ) : UiState()
     }
 

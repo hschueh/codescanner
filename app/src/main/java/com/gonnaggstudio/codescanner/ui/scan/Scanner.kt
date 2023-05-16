@@ -19,6 +19,7 @@ import java.util.concurrent.Executor
 @Composable
 fun ScannerCompose(
     modifier: Modifier,
+    torchEnabled: Boolean = false,
     onCodeRead: (barcodes: List<Barcode>) -> Unit
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -64,6 +65,9 @@ fun ScannerCompose(
         update = { preview ->
             if (cameraIsInitialized) {
                 preview.implementationMode = PreviewView.ImplementationMode.COMPATIBLE
+                torchEnabled.let {
+                    preview.controller?.enableTorch(it)
+                }
             }
         }
     )
