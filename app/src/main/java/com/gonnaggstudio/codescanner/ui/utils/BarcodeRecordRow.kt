@@ -5,8 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,7 +41,7 @@ fun BarcodeRecordRow(
                     },
                 colorFilter = ColorFilter.tint(Color.Black),
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_content_copy),
-                contentDescription = label
+                contentDescription = "Copy Url"
             )
             Image(
                 modifier = Modifier
@@ -53,8 +51,8 @@ fun BarcodeRecordRow(
                         onShare.invoke()
                     },
                 colorFilter = ColorFilter.tint(Color.Black),
-                imageVector = Icons.Default.Share,
-                contentDescription = label
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_fullscreen),
+                contentDescription = "View Detail"
             )
             Image(
                 modifier = Modifier
@@ -65,7 +63,7 @@ fun BarcodeRecordRow(
                     },
                 colorFilter = ColorFilter.tint(Color.Black),
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_open_in_new),
-                contentDescription = label
+                contentDescription = "Open Url"
             )
         }
     }

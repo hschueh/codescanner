@@ -1,5 +1,6 @@
 package com.gonnaggstudio.codescanner.ui.detail
 
+import android.graphics.Bitmap
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,7 +8,9 @@ import com.gonnaggstudio.codescanner.db.dao.BarcodeDao
 import com.gonnaggstudio.codescanner.ext.toBarcode
 import com.gonnaggstudio.codescanner.model.Barcode
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,9 +33,12 @@ class DetailViewModel @Inject constructor(
     fun onAction(uiAction: UiAction) {
         when (uiAction) {
             UiAction.BarcodeDetailPageLaunched -> {
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.IO) {
                     val barcode = barcodeDao.getBarcodeById(detailArgs.id)?.toBarcode()
-                    _uiState.value = _uiState.value.copy(barcode = barcode)
+                    _uiState.value = _uiState.value.copy(
+                        barcode = barcode,
+                        bitmap = barcode?.encodeAsBitmap(),
+                    )
                 }
             }
         }
@@ -43,7 +49,8 @@ class DetailViewModel @Inject constructor(
     }
 
     data class UiState(
-        val barcode: Barcode? = null
+        val barcode: Barcode? = null,
+        val bitmap: Bitmap? = null,
     )
 }
 

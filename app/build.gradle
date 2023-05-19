@@ -74,6 +74,9 @@ dependencies {
     implementation "androidx.camera:camera-mlkit-vision:${camerax_version}"
     // If you want to additionally use the CameraX Extensions library
     implementation "androidx.camera:camera-extensions:${camerax_version}"
+
+    implementation 'com.google.zxing:core:3.5.1'
+
     implementation "com.google.dagger:hilt-android:2.44"
     kapt "com.google.dagger:hilt-compiler:2.44"
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
@@ -81,7 +84,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    debugImplementation 'androidx.compose.ui:ui-tooling:1.4.2'
+    debugImplementation 'androidx.compose.ui:ui-tooling:1.4.3'
 
     def room_version = "2.5.1"
     implementation "androidx.room:room-runtime:$room_version"
