@@ -46,11 +46,19 @@ class MainActivity : AppCompatActivity() {
                 mainViewModel.uiEvent.collect { event ->
                     when {
                         event.barcodeToOpen != null -> {
-                            customTabUtils.launchUri(this@MainActivity, Uri.parse(event.barcodeToOpen.url))
+                            customTabUtils.launchUri(
+                                context = this@MainActivity,
+                                uri = Uri.parse(event.barcodeToOpen.url),
+                                openNewIncognitoTab = mainViewModel.openUrlInIncognitoMode.value
+                            )
                             mainViewModel.onAction(MainViewModel.UiAction.BarcodeOpened)
                         }
                         event.linkToOpen != null -> {
-                            customTabUtils.launchUri(this@MainActivity, Uri.parse(event.linkToOpen))
+                            customTabUtils.launchUri(
+                                context = this@MainActivity,
+                                uri = Uri.parse(event.linkToOpen),
+                                openNewIncognitoTab = mainViewModel.openUrlInIncognitoMode.value
+                            )
                             mainViewModel.onAction(MainViewModel.UiAction.LinkOpened)
                         }
                         event.barcodeToViewDetail != null -> {

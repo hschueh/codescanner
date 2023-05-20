@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.gonnaggstudio.codescanner.db.AppDatabase
 import com.gonnaggstudio.codescanner.db.Constants.BARCODE_DATABASE
 import com.gonnaggstudio.codescanner.db.dao.BarcodeDao
+import com.gonnaggstudio.codescanner.pref.DatastoreManager
 import com.gonnaggstudio.codescanner.utils.clipboard.ClipboardManagerHelper
 import dagger.Module
 import dagger.Provides
@@ -36,5 +37,11 @@ class AppModule {
     @Provides
     fun provideClipboardManagerHelper(@ApplicationContext appContext: Context): ClipboardManagerHelper {
         return ClipboardManagerHelper(appContext)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDatastoreManager(@ApplicationContext appContext: Context): DatastoreManager {
+        return DatastoreManager(appContext)
     }
 }

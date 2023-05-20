@@ -5,18 +5,25 @@ import androidx.lifecycle.viewModelScope
 import com.gonnaggstudio.codescanner.db.dao.BarcodeDao
 import com.gonnaggstudio.codescanner.ext.toEntity
 import com.gonnaggstudio.codescanner.model.Barcode
+import com.gonnaggstudio.codescanner.pref.DatastoreManager
+import com.gonnaggstudio.codescanner.ui.settings.SettingsViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor() : ViewModel() {
+class MainViewModel @Inject constructor(
+    val barcodeDao: BarcodeDao,
+    val datastoreManager: DatastoreManager
+) : ViewModel() {
 
-    @Inject
-    lateinit var barcodeDao: BarcodeDao
+    val openUrlInIncognitoMode: StateFlow<Boolean> = datastoreManager.readBooleans(
+        SettingsViewModel.SettingItemKey.OPEN_WEB_IN_INCOGNITO.key
+    ).map {
+        it[SettingsViewModel.SettingItemKey.OPEN_WEB_IN_INCOGNITO.key] ?: false
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Default)
     val uiState: StateFlow<UiState> = _uiState

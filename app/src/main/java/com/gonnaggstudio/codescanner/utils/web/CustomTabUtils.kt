@@ -19,19 +19,32 @@ import javax.inject.Singleton
 
 @Singleton
 class CustomTabUtils @Inject constructor() {
-    fun launchUri(context: Context, uri: Uri) {
+    /**
+       TODO: need to add some guidance for this feature
+         Need to enabled these two flags:
+          - chrome://flags/#cct-incognito
+          - chrome://flags/#cct-incognito-available-to-third-party
+         ref: https://stackoverflow.com/a/72540492
+     */
+    fun launchUri(context: Context, uri: Uri, openNewIncognitoTab: Boolean = false) {
         // Maybe handled by specific app.
         val launched = if (Build.VERSION.SDK_INT >= 30) launchNativeApi30(
             context,
-            uri
+            uri,
+            openNewIncognitoTab
         ) else launchNativeBeforeApi30(
-            context, uri
+            context,
+            uri,
+            openNewIncognitoTab
         )
         if (launched) return
 
         try {
             CustomTabsIntent.Builder()
                 .build()
+                .apply {
+                    intent.decorateForIncognito(openNewIncognitoTab)
+                }
                 .launchUrl(context, uri)
         } catch (e: Exception) {
             val intent = Intent(context, WebviewActivity::class.java)
@@ -41,13 +54,14 @@ class CustomTabUtils @Inject constructor() {
     }
 
     @RequiresApi(Build.VERSION_CODES.R)
-    private fun launchNativeApi30(context: Context, uri: Uri): Boolean {
+    private fun launchNativeApi30(context: Context, uri: Uri, openNewIncognitoTab: Boolean = false): Boolean {
         val nativeAppIntent = Intent(Intent.ACTION_VIEW, uri)
             .addCategory(Intent.CATEGORY_BROWSABLE)
             .addFlags(
                 Intent.FLAG_ACTIVITY_NEW_TASK or
                     Intent.FLAG_ACTIVITY_REQUIRE_NON_BROWSER
             )
+            .decorateForIncognito(openNewIncognitoTab)
         return try {
             context.startActivity(nativeAppIntent)
             true
@@ -56,7 +70,7 @@ class CustomTabUtils @Inject constructor() {
         }
     }
 
-    private fun launchNativeBeforeApi30(context: Context, uri: Uri): Boolean {
+    private fun launchNativeBeforeApi30(context: Context, uri: Uri, openNewIncognitoTab: Boolean = false): Boolean {
         val pm: PackageManager = context.packageManager
 
         // Get all Apps that resolve a generic url
@@ -64,6 +78,7 @@ class CustomTabUtils @Inject constructor() {
             .setAction(Intent.ACTION_VIEW)
             .addCategory(Intent.CATEGORY_BROWSABLE)
             .setData(Uri.fromParts("http", "", null))
+            .decorateForIncognito(openNewIncognitoTab)
         val genericResolvedList: Set<String> = extractPackageNames(
             pm.queryIntentActivities(browserActivityIntent, 0)
         )
@@ -96,5 +111,15 @@ class CustomTabUtils @Inject constructor() {
             mutableSet.add(it.activityInfo.packageName)
         }
         return mutableSet
+    }
+
+    private fun Intent.decorateForIncognito(openNewIncognitoTab: Boolean) = this.apply {
+        if (openNewIncognitoTab) {
+            putExtra(INCOGNITO_FLAG, true)
+        }
+    }
+
+    companion object {
+        const val INCOGNITO_FLAG = "com.google.android.apps.chrome.EXTRA_OPEN_NEW_INCOGNITO_TAB"
     }
 }

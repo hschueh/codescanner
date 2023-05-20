@@ -13,10 +13,9 @@ import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
-class HistoryViewModel @Inject constructor() : ViewModel() {
-
-    @Inject
-    lateinit var barcodeDao: BarcodeDao
+class HistoryViewModel @Inject constructor(
+    val barcodeDao: BarcodeDao
+) : ViewModel() {
 
     private val pager = Pager(
         config = PagingConfig(pageSize = 50)

@@ -16,13 +16,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    val barcodeDao: BarcodeDao
 ) : ViewModel() {
 
     val detailArgs: DetailArg = DetailArg(savedStateHandle)
-
-    @Inject
-    lateinit var barcodeDao: BarcodeDao
 
     private val _uiState: MutableStateFlow<UiState> by lazy {
         MutableStateFlow(UiState())
