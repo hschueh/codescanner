@@ -48,6 +48,12 @@ class MainViewModel @Inject constructor() : ViewModel() {
             is UiAction.OpenBarcodeLink -> {
                 openBarcode(uiAction.barcode)
             }
+            is UiAction.CopyLink -> {
+                setLinkToCopy(uiAction.url)
+            }
+            UiAction.LinkCopied -> {
+                setLinkToCopy(null)
+            }
         }
     }
 
@@ -101,6 +107,14 @@ class MainViewModel @Inject constructor() : ViewModel() {
         )
     }
 
+    private fun setLinkToCopy(url: String?) {
+        val state = uiEvent.value
+        if (url == state.linkToCopy) return
+        _uiEvent.value = state.copy(
+            linkToCopy = url
+        )
+    }
+
     sealed class UiAction {
         object BackToHomePage : UiAction()
         object GoToHistoryPage : UiAction()
@@ -113,6 +127,8 @@ class MainViewModel @Inject constructor() : ViewModel() {
         object LinkOpened : UiAction()
         object BarcodeOpened : UiAction()
         object BarcodeDetailPageOpened : UiAction()
+        data class CopyLink(val url: String) : UiAction()
+        object LinkCopied : UiAction()
     }
 
     sealed class UiState {
@@ -126,7 +142,8 @@ class MainViewModel @Inject constructor() : ViewModel() {
     data class UiEvent(
         val linkToOpen: String? = null,
         val barcodeToOpen: Barcode? = null,
-        val barcodeToViewDetail: Barcode? = null
+        val barcodeToViewDetail: Barcode? = null,
+        val linkToCopy: String? = null,
     )
 
     companion object {

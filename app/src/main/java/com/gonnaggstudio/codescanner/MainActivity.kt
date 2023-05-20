@@ -13,7 +13,8 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import com.gonnaggstudio.codescanner.ui.MainScreen
-import com.gonnaggstudio.codescanner.web.CustomTabUtils
+import com.gonnaggstudio.codescanner.utils.clipboard.ClipboardManagerHelper
+import com.gonnaggstudio.codescanner.utils.web.CustomTabUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,6 +28,9 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var customTabUtils: CustomTabUtils
+
+    @Inject
+    lateinit var clipboardManagerHelper: ClipboardManagerHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +56,10 @@ class MainActivity : AppCompatActivity() {
                         event.barcodeToViewDetail != null -> {
                             mainViewModel.onAction(MainViewModel.UiAction.GoToDetailPage(event.barcodeToViewDetail.id))
                             mainViewModel.onAction(MainViewModel.UiAction.BarcodeDetailPageOpened)
+                        }
+                        event.linkToCopy != null -> {
+                            clipboardManagerHelper.copyText(event.linkToCopy)
+                            mainViewModel.onAction(MainViewModel.UiAction.LinkCopied)
                         }
                     }
                 }

@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.gonnaggstudio.codescanner.db.AppDatabase
 import com.gonnaggstudio.codescanner.db.Constants.BARCODE_DATABASE
 import com.gonnaggstudio.codescanner.db.dao.BarcodeDao
+import com.gonnaggstudio.codescanner.utils.clipboard.ClipboardManagerHelper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,5 +30,11 @@ class AppModule {
     @Provides
     fun provideBarcodeDao(appDatabase: AppDatabase): BarcodeDao {
         return appDatabase.barcodeDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideClipboardManagerHelper(@ApplicationContext appContext: Context): ClipboardManagerHelper {
+        return ClipboardManagerHelper(appContext)
     }
 }

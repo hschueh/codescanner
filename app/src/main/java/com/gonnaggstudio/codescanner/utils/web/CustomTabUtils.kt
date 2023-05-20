@@ -3,7 +3,7 @@
  * Created by Hoso on 2021/9/22.
  */
 
-package com.gonnaggstudio.codescanner.web
+package com.gonnaggstudio.codescanner.utils.web
 
 import android.content.ActivityNotFoundException
 import android.content.Context

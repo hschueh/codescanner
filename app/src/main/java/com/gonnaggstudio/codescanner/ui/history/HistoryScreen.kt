@@ -30,7 +30,7 @@ fun HistoryScreen(
             barcodes[index]?.let { item ->
                 BarcodeRecordRow(
                     onCopy = {
-                        // TODO
+                        mainViewModel.onAction(MainViewModel.UiAction.CopyLink(item.url))
                     },
                     onOpen = {
                         mainViewModel.onAction(MainViewModel.UiAction.OpenUrlLink(item.url))

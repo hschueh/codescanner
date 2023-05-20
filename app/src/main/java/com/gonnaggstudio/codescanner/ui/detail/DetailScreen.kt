@@ -56,6 +56,7 @@ fun DetailScreen(
                         .padding(4.dp)
                         .size(24.dp)
                         .clickable {
+                            mainViewModel.onAction(MainViewModel.UiAction.CopyLink(barcode.url))
                         },
                     colorFilter = ColorFilter.tint(Color.Black),
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_content_copy),
