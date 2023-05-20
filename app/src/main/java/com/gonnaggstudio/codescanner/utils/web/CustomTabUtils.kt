@@ -19,13 +19,6 @@ import javax.inject.Singleton
 
 @Singleton
 class CustomTabUtils @Inject constructor() {
-    /**
-       TODO: need to add some guidance for this feature
-         Need to enabled these two flags:
-          - chrome://flags/#cct-incognito
-          - chrome://flags/#cct-incognito-available-to-third-party
-         ref: https://stackoverflow.com/a/72540492
-     */
     fun launchUri(context: Context, uri: Uri, openNewIncognitoTab: Boolean = false) {
         // Maybe handled by specific app.
         val launched = if (Build.VERSION.SDK_INT >= 30) launchNativeApi30(
