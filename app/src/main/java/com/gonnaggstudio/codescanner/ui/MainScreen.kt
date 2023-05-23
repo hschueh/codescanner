@@ -1,12 +1,17 @@
 package com.gonnaggstudio.codescanner.ui
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -14,6 +19,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.gonnaggstudio.codescanner.MainViewModel
+import com.gonnaggstudio.codescanner.ui.ads.BannerAds
 import com.gonnaggstudio.codescanner.ui.detail.DetailScreen
 import com.gonnaggstudio.codescanner.ui.history.HistoryScreen
 import com.gonnaggstudio.codescanner.ui.home.HomeScreen
@@ -57,18 +63,25 @@ fun MainScreen(
             )
         },
         content = {
-            NavHost(navController = navController, MainViewModel.NAVIGATION_HOME) {
-                composable(MainViewModel.NAVIGATION_HOME) { HomeScreen() }
-                composable(MainViewModel.NAVIGATION_HISTORY) { HistoryScreen() }
-                composable(MainViewModel.NAVIGATION_SETTINGS) { SettingsScreen() }
-                composable(
-                    "${MainViewModel.NAVIGATION_DETAIL}/{barcodeId}",
-                    arguments = listOf(
-                        navArgument("barcodeId") { type = NavType.IntType },
-                    ),
-                ) {
-                    DetailScreen()
+            Box(modifier = Modifier.fillMaxSize()) {
+                NavHost(navController = navController, MainViewModel.NAVIGATION_HOME) {
+                    composable(MainViewModel.NAVIGATION_HOME) { HomeScreen() }
+                    composable(MainViewModel.NAVIGATION_HISTORY) { HistoryScreen() }
+                    composable(MainViewModel.NAVIGATION_SETTINGS) { SettingsScreen() }
+                    composable(
+                        "${MainViewModel.NAVIGATION_DETAIL}/{barcodeId}",
+                        arguments = listOf(
+                            navArgument("barcodeId") { type = NavType.IntType },
+                        ),
+                    ) {
+                        DetailScreen()
+                    }
                 }
+                BannerAds(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                )
             }
         }
     )

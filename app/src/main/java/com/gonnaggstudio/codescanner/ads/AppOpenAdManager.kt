@@ -3,6 +3,7 @@ package com.gonnaggstudio.codescanner.ads
 import android.app.Activity
 import android.content.Context
 import android.util.Log
+import com.gonnaggstudio.codescanner.BuildConfig
 import com.gonnaggstudio.codescanner.MainApplication
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
@@ -34,7 +35,7 @@ class AppOpenAdManager @Inject constructor() {
         val request = AdRequest.Builder().build()
         AppOpenAd.load(
             /* context = */ context,
-            /* adUnitId = */ AD_TEST_UNIT_ID,
+            /* adUnitId = */ BuildConfig.OPEN_AD_UNIT_ID,
             /* adRequest = */ request,
             /* loadCallback = */ object : AppOpenAd.AppOpenAdLoadCallback() {
 
@@ -120,7 +121,5 @@ class AppOpenAdManager @Inject constructor() {
 
     companion object {
         private const val LOG_TAG = "AppOpenAdManager"
-        private const val AD_TEST_UNIT_ID = "ca-app-pub-3940256099942544/3419835294"
-        private const val AD_UNIT_ID = "ca-app-pub-8550386526282187/4965537905"
     }
 }

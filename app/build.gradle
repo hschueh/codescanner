@@ -21,9 +21,16 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField "String", "OPEN_AD_UNIT_ID", "\"ca-app-pub-3940256099942544/3419835294\""
+            buildConfigField "String", "BANNER_AD_UNIT_ID", "\"ca-app-pub-3940256099942544/6300978111\""
+        }
         release {
+            buildConfigField "String", "OPEN_AD_UNIT_ID", "\"ca-app-pub-8550386526282187/4965537905\""
+            buildConfigField "String", "BANNER_AD_UNIT_ID", "\"ca-app-pub-8550386526282187/8993564201\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
         }
     }
     compileOptions {
