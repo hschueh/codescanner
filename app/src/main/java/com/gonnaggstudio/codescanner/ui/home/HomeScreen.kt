@@ -21,6 +21,7 @@ import com.gonnaggstudio.codescanner.MainViewModel
 import com.gonnaggstudio.codescanner.R
 import com.gonnaggstudio.codescanner.ext.toBarcode
 import com.gonnaggstudio.codescanner.ui.scan.ScannerCompose
+import com.gonnaggstudio.codescanner.ui.scan.ScannerOverlay
 import com.gonnaggstudio.codescanner.ui.utils.hiltActivityViewModel
 import com.google.mlkit.vision.barcode.common.Barcode
 
@@ -62,6 +63,9 @@ fun HomeScreenScanning(
         ) {
             onBarcodeReceived(it)
         }
+        ScannerOverlay(
+            modifier = Modifier.fillMaxSize()
+        )
         if (state.list.isNotEmpty()) {
             Column(
                 modifier = Modifier
