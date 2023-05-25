@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -66,52 +67,70 @@ fun HomeScreenScanning(
         ScannerOverlay(
             modifier = Modifier.fillMaxSize()
         )
-        if (state.list.isNotEmpty()) {
-            Column(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                state.list.map { barcode ->
-                    Text(
-                        modifier = Modifier
-                            .padding(4.dp)
-                            .background(
-                                color = Color.DarkGray,
-                                shape = RoundedCornerShape(4.dp)
-                            )
-                            .clickable {
-                                onBarcodeClicked(barcode)
-                            }
-                            .padding(4.dp),
-                        text = barcode.rawValue ?: "Null",
-                    )
-                }
-            }
-        }
-
-        IconButton(
+        HomeScreenFooter(
             modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(16.dp),
-            onClick = onTorchClicked
+                .wrapContentHeight()
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 72.dp),
+            barcode = state.list.firstOrNull(),
+            onBarcodeClicked = onBarcodeClicked,
+            isTorchEnabled = state.isTorchEnabled,
+            onTorchClicked = onTorchClicked
+        )
+    }
+}
+
+@Composable
+fun HomeScreenFooter(
+    modifier: Modifier = Modifier,
+    barcode: Barcode? = null,
+    onBarcodeClicked: (Barcode) -> Unit = {},
+    isTorchEnabled: Boolean = false,
+    onTorchClicked: () -> Unit = {},
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        barcode?.let {
+            Text(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .background(
+                        color = Color.LightGray,
+                        shape = RoundedCornerShape(4.dp)
+                    )
+                    .clickable {
+                        onBarcodeClicked(barcode)
+                    }
+                    .wrapContentHeight()
+                    .padding(12.dp),
+                text = barcode.rawValue ?: "Null",
+                style = MaterialTheme.typography.body1
+            )
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
-            when (state.isTorchEnabled) {
-                true -> {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_flash_on),
-                        contentDescription = "toggle flash off",
-                        tint = Color.LightGray
-                    )
-                }
-                false -> {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_flash_off),
-                        contentDescription = "toggle flash on",
-                        tint = Color.LightGray
-                    )
-                }
+            IconButton(
+                modifier = Modifier
+                    .size(48.dp)
+                    .background(Color.LightGray.copy(0.8f), shape = RoundedCornerShape(24.dp)),
+                onClick = onTorchClicked
+            ) {
+                Icon(
+                    imageVector = when (isTorchEnabled) {
+                        true -> {
+                            ImageVector.vectorResource(id = R.drawable.ic_flash_on)
+                        }
+                        false -> {
+                            ImageVector.vectorResource(id = R.drawable.ic_flash_off)
+                        }
+                    },
+                    contentDescription = "isTorchEnabled = $isTorchEnabled",
+                    tint = Color.DarkGray
+                )
             }
         }
     }

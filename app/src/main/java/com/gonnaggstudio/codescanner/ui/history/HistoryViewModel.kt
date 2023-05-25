@@ -1,15 +1,19 @@
 package com.gonnaggstudio.codescanner.ui.history
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.gonnaggstudio.codescanner.db.dao.BarcodeDao
 import com.gonnaggstudio.codescanner.ext.toBarcode
+import com.gonnaggstudio.codescanner.ext.toEntity
 import com.gonnaggstudio.codescanner.model.Barcode
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,10 +38,20 @@ class HistoryViewModel @Inject constructor(
     val uiState: StateFlow<UiState> = _uiState
 
     fun onAction(uiAction: UiAction) {
-        // TODO nothing to do so far.
+        when (uiAction) {
+            is UiAction.DeleteBarcode -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    uiAction.barcode.toEntity().let {
+                        barcodeDao.delete(it)
+                    }
+                }
+            }
+        }
     }
 
-    sealed class UiAction
+    sealed class UiAction {
+        data class DeleteBarcode(val barcode: Barcode) : UiAction()
+    }
 
     data class UiState(
         val barcodes: Flow<PagingData<Barcode>>

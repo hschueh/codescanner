@@ -1,19 +1,24 @@
 package com.gonnaggstudio.codescanner.ui.history
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.gonnaggstudio.codescanner.MainViewModel
-import com.gonnaggstudio.codescanner.ui.utils.BarcodeRecordRow
+import com.gonnaggstudio.codescanner.ui.utils.SwipeToDismissBarcodeRecord
 import com.gonnaggstudio.codescanner.ui.utils.hiltActivityViewModel
 
 @Composable
@@ -24,11 +29,31 @@ fun HistoryScreen(
     val state: HistoryViewModel.UiState = historyViewModel.uiState.collectAsState().value
     val barcodes = state.barcodes.collectAsLazyPagingItems()
     LazyColumn {
+        if (barcodes.itemCount == 0 && barcodes.loadState.refresh is LoadState.NotLoading) {
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.White)
+                        .height(100.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "No history",
+                        style = MaterialTheme.typography.h6,
+                    )
+                }
+            }
+        }
         items(
             count = barcodes.itemCount
         ) { index ->
             barcodes[index]?.let { item ->
-                BarcodeRecordRow(
+                SwipeToDismissBarcodeRecord(
+                    barcode = item,
+                    onDelete = {
+                        historyViewModel.onAction(HistoryViewModel.UiAction.DeleteBarcode(it))
+                    },
                     onCopy = {
                         mainViewModel.onAction(MainViewModel.UiAction.CopyLink(item.url))
                     },
@@ -38,10 +63,13 @@ fun HistoryScreen(
                     onShare = {
                         mainViewModel.onAction(MainViewModel.UiAction.ViewBarcodeDetail(item))
                     },
-                    modifier = Modifier.fillMaxWidth(),
-                    label = item.url
                 )
-                Divider(Modifier.fillMaxWidth().height(1.dp).background(Color.Gray))
+                Divider(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .background(Color.Gray)
+                )
             }
         }
     }

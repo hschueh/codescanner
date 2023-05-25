@@ -30,5 +30,5 @@ interface BarcodeDao {
     suspend fun delete(barcodeEntity: BarcodeEntity)
 
     @Query("DELETE FROM $BARCODE_TABLE WHERE id IN (:ids)")
-    suspend fun deleteByIds(ids: List<Long>)
+    suspend fun deleteByIds(ids: List<Int>)
 }

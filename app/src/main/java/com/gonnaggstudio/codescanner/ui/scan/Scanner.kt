@@ -90,7 +90,7 @@ fun ScannerOverlay(modifier: Modifier = Modifier) {
     var viewSize by remember { mutableStateOf(IntSize.Zero) }
     val width = viewSize.width * 0.8f
     val offsetX = (viewSize.width - width) * 0.5f
-    val offsetY = (viewSize.height - width) * 0.4f
+    val offsetY = (viewSize.height - width) * 0.3f
     Canvas(
         modifier = modifier
             .fillMaxSize()
