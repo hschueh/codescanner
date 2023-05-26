@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -47,7 +48,7 @@ fun DetailScreen(
                         .padding(16.dp),
                     contentDescription = null,
                 )
-            } ?: Text(text = "No bitmap")
+            } ?: Text(text = stringResource(R.string.no_bitmap))
             Row(
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {

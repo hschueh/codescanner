@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -21,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gonnaggstudio.codescanner.MainViewModel
 import com.gonnaggstudio.codescanner.ui.utils.hiltActivityViewModel
+import com.gonnaggstudio.codescanner.R
 
 @Composable
 fun SettingsScreen(
@@ -34,7 +36,7 @@ fun SettingsScreen(
             when (it) {
                 is SettingsViewModel.SettingItem.ClickableItem -> {
                     SettingsClickable(
-                        label = it.title,
+                        label = stringResource(id = it.title),
                         onClick = {
                             settingsViewModel.onAction(SettingsViewModel.UiAction.OnSettingItemClicked(it.enumKey))
                         }
@@ -42,7 +44,7 @@ fun SettingsScreen(
                 }
                 is SettingsViewModel.SettingItem.SwitchItem -> {
                     SettingsSwitchable(
-                        label = it.title,
+                        label = stringResource(id = it.title),
                         isChecked = it.isEnabled,
                         onClick = {
                             settingsViewModel.onAction(SettingsViewModel.UiAction.OnSettingItemClicked(it.enumKey))
@@ -107,28 +109,24 @@ fun SettingsSwitchable(label: String, isChecked: Boolean, onClick: () -> Unit) {
  - chrome://flags/#cct-incognito-available-to-third-party
  ref: https://stackoverflow.com/a/72540492
  */
-val fulltext = """
-        Need to enabled these two flags to make incognito mode work:
-        - chrome://flags/#cct-incognito
-        - chrome://flags/#cct-incognito-available-to-third-party
-        (Click the above links to copy the url. Open it in Chrome)
-""".trimIndent()
-val cctIncognitoTag = "cct-incognito"
-val cctIncognito = "chrome://flags/#cct-incognito"
-val cctIncognitoStart = fulltext.indexOf(cctIncognito)
-val cctIncognitoEnd = cctIncognitoStart + cctIncognito.length
-val cctIncognitoThirdPartyTag = "cct-incognito-available-to-third-party"
-val cctIncognitoThirdParty = "chrome://flags/#cct-incognito-available-to-third-party"
-val cctIncognitoThirdPartyStart = fulltext.indexOf(cctIncognitoThirdParty)
-val cctIncognitoThirdPartyEnd = cctIncognitoThirdPartyStart + cctIncognitoThirdParty.length
 
 @Composable
 fun IncognitoGuidance(
     onUrlClick: (String) -> Unit
 ) {
+    val fullText = stringResource(id = R.string.need_to_enabled_these)
+    val cctIncognitoTag = "cct-incognito"
+    val cctIncognito = "chrome://flags/#cct-incognito"
+    val cctIncognitoStart = fullText.indexOf(cctIncognito)
+    val cctIncognitoEnd = cctIncognitoStart + cctIncognito.length
+    val cctIncognitoThirdPartyTag = "cct-incognito-available-to-third-party"
+    val cctIncognitoThirdParty = "chrome://flags/#cct-incognito-available-to-third-party"
+    val cctIncognitoThirdPartyStart = fullText.indexOf(cctIncognitoThirdParty)
+    val cctIncognitoThirdPartyEnd = cctIncognitoThirdPartyStart + cctIncognitoThirdParty.length
+
     val annotatedString = remember {
         AnnotatedString.Builder().apply {
-            append(fulltext)
+            append(fullText)
             addStringAnnotation(
                 tag = cctIncognitoTag,
                 annotation = cctIncognito,

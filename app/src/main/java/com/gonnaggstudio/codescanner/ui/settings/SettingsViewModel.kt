@@ -1,7 +1,9 @@
 package com.gonnaggstudio.codescanner.ui.settings
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gonnaggstudio.codescanner.R
 import com.gonnaggstudio.codescanner.db.dao.BarcodeDao
 import com.gonnaggstudio.codescanner.pref.DatastoreManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -72,8 +74,8 @@ class SettingsViewModel @Inject constructor(
     )
 
     sealed class SettingItem {
-        data class ClickableItem(val title: String, val enumKey: SettingItemKey) : SettingItem()
-        data class SwitchItem(val title: String, val enumKey: SettingItemKey, val isEnabled: Boolean) : SettingItem()
+        data class ClickableItem(@StringRes val title: Int, val enumKey: SettingItemKey) : SettingItem()
+        data class SwitchItem(@StringRes val title: Int, val enumKey: SettingItemKey, val isEnabled: Boolean) : SettingItem()
     }
 
     enum class SettingItemKey(val key: String) {
@@ -83,8 +85,8 @@ class SettingsViewModel @Inject constructor(
 
     companion object {
         private val SETTING_ITEMS = listOf(
-            SettingItem.ClickableItem("Clear History", SettingItemKey.CLEAR_HISTORY),
-            SettingItem.SwitchItem("Open web in incognito", SettingItemKey.OPEN_WEB_IN_INCOGNITO, false),
+            SettingItem.ClickableItem(R.string.clear_history, SettingItemKey.CLEAR_HISTORY),
+            SettingItem.SwitchItem(R.string.open_web_in_incognito, SettingItemKey.OPEN_WEB_IN_INCOGNITO, false),
         )
 
         private val KEYS_IN_DATASTORE = arrayOf(SettingItemKey.OPEN_WEB_IN_INCOGNITO.key)

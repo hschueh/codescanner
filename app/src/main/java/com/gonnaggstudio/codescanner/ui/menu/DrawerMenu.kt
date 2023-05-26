@@ -14,8 +14,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.gonnaggstudio.codescanner.MainViewModel
+import com.gonnaggstudio.codescanner.R
 import com.gonnaggstudio.codescanner.ui.utils.ButtonRow
 import com.gonnaggstudio.codescanner.ui.utils.hiltActivityViewModel
 import kotlinx.coroutines.launch
@@ -35,7 +37,7 @@ fun ColumnScope.DrawerMenu(
             }
         },
         icon = Icons.Default.Home,
-        label = "Back To Homepage"
+        label = stringResource(R.string.back_to_homepage)
     )
     Divider(Modifier.fillMaxWidth().height(1.dp).background(Color.Gray))
     ButtonRow(
@@ -47,7 +49,7 @@ fun ColumnScope.DrawerMenu(
             }
         },
         icon = Icons.Default.DateRange,
-        label = "History"
+        label = stringResource(R.string.history)
     )
     Divider(Modifier.fillMaxWidth().height(1.dp).background(Color.Gray))
     ButtonRow(
@@ -59,6 +61,6 @@ fun ColumnScope.DrawerMenu(
             }
         },
         icon = Icons.Default.Settings,
-        label = "Settings"
+        label = stringResource(R.string.settings)
     )
 }

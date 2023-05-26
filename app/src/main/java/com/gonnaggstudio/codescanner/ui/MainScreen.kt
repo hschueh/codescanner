@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -26,6 +27,7 @@ import com.gonnaggstudio.codescanner.ui.home.HomeScreen
 import com.gonnaggstudio.codescanner.ui.menu.DrawerMenu
 import com.gonnaggstudio.codescanner.ui.settings.SettingsScreen
 import com.gonnaggstudio.codescanner.ui.utils.hiltActivityViewModel
+import com.gonnaggstudio.codescanner.R
 import kotlinx.coroutines.launch
 
 @Composable
@@ -43,7 +45,7 @@ fun MainScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text("QR Code Reader")
+                    Text(stringResource(id = R.string.app_name))
                 },
                 actions = {
                     IconButton(

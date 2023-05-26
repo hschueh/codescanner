@@ -1,13 +1,11 @@
 <resources>
     <string name="app_name">QR Code Reader</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
-
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="no_bitmap">No bitmap</string>
+    <string name="no_history">No history</string>
+    <string name="back_to_homepage">Back To Homepage</string>
+    <string name="history">History</string>
+    <string name="settings">Settings</string>
+    <string name="need_to_enabled_these">Need to enabled these two flags to make incognito mode work:\n - chrome://flags/#cct-incognito\n - chrome://flags/#cct-incognito-available-to-third-party\n (Click the above links to copy the url. Open it in Chrome)</string>
+    <string name="clear_history">Clear History</string>
+    <string name="open_web_in_incognito">Open web in incognito</string>
 </resources>

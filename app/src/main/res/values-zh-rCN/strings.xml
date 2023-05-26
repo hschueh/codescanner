@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">QR Code Reader 二维码扫描器</string>
+    <string name="no_bitmap">生成图片失败</string>
+    <string name="no_history">目前没有记录</string>
+    <string name="back_to_homepage">回到主界面</string>
+    <string name="history">记录</string>
+    <string name="settings">设置</string>
+    <string name="need_to_enabled_these">需要启用这两个标志才能使无痕模式正常运作：\n - chrome://flags/#cct-incognito\n - chrome://flags/#cct-incognito-available-to-third-party\n（点击上面的链接以复制网址。在Chrome中打开它）</string>
+    <string name="clear_history">清除所有记录</string>
+    <string name="open_web_in_incognito">在无痕模式开启</string>
+</resources>

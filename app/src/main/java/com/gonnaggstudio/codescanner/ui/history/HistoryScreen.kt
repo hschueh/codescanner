@@ -13,11 +13,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.gonnaggstudio.codescanner.MainViewModel
+import com.gonnaggstudio.codescanner.R
 import com.gonnaggstudio.codescanner.ui.utils.SwipeToDismissBarcodeRecord
 import com.gonnaggstudio.codescanner.ui.utils.hiltActivityViewModel
 
@@ -39,7 +41,7 @@ fun HistoryScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "No history",
+                        text = stringResource(R.string.no_history),
                         style = MaterialTheme.typography.h6,
                     )
                 }
