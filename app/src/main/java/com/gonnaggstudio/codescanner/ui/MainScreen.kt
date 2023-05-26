@@ -20,6 +20,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.gonnaggstudio.codescanner.MainViewModel
+import com.gonnaggstudio.codescanner.R
 import com.gonnaggstudio.codescanner.ui.ads.BannerAds
 import com.gonnaggstudio.codescanner.ui.detail.DetailScreen
 import com.gonnaggstudio.codescanner.ui.history.HistoryScreen
@@ -27,7 +28,6 @@ import com.gonnaggstudio.codescanner.ui.home.HomeScreen
 import com.gonnaggstudio.codescanner.ui.menu.DrawerMenu
 import com.gonnaggstudio.codescanner.ui.settings.SettingsScreen
 import com.gonnaggstudio.codescanner.ui.utils.hiltActivityViewModel
-import com.gonnaggstudio.codescanner.R
 import kotlinx.coroutines.launch
 
 @Composable

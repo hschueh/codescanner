@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gonnaggstudio.codescanner.MainViewModel
-import com.gonnaggstudio.codescanner.ui.utils.hiltActivityViewModel
 import com.gonnaggstudio.codescanner.R
+import com.gonnaggstudio.codescanner.ui.utils.hiltActivityViewModel
 
 @Composable
 fun SettingsScreen(

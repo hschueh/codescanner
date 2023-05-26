@@ -9,9 +9,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
 import com.gonnaggstudio.codescanner.ui.MainScreen
 import com.gonnaggstudio.codescanner.utils.clipboard.ClipboardManagerHelper
 import com.gonnaggstudio.codescanner.utils.web.CustomTabUtils
