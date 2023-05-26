@@ -36,7 +36,7 @@ fun SettingsScreen(
                     SettingsClickable(
                         label = it.title,
                         onClick = {
-                            settingsViewModel.onAction(SettingsViewModel.UiAction.OnSettingItemClicked(it.key))
+                            settingsViewModel.onAction(SettingsViewModel.UiAction.OnSettingItemClicked(it.enumKey))
                         }
                     )
                 }
@@ -45,7 +45,7 @@ fun SettingsScreen(
                         label = it.title,
                         isChecked = it.isEnabled,
                         onClick = {
-                            settingsViewModel.onAction(SettingsViewModel.UiAction.OnSettingItemClicked(it.key))
+                            settingsViewModel.onAction(SettingsViewModel.UiAction.OnSettingItemClicked(it.enumKey))
                         }
                     )
                 }
