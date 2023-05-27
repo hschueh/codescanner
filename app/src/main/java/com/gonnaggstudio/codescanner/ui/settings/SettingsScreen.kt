@@ -16,7 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -160,9 +159,7 @@ fun IncognitoGuidance(
     ClickableText(
         modifier = Modifier.padding(16.dp),
         text = annotatedString,
-        style = TextStyle.Default.copy(
-            fontSize = 12.sp
-        ),
+        style = MaterialTheme.typography.body2,
         onClick = {
             annotatedString.getStringAnnotations(cctIncognitoTag, it, it).firstOrNull()?.let {
                 onUrlClick(cctIncognito)

@@ -5,7 +5,9 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.colorResource
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -33,7 +35,18 @@ class MainActivity : AppCompatActivity() {
         setContentView(ComposeView(this))
 
         setContent {
-            MainScreen()
+            MaterialTheme(
+                colors = MaterialTheme.colors.copy(
+                    primary = colorResource(id = R.color.purple_500),
+                    primaryVariant = colorResource(id = R.color.purple_700),
+                    secondary = colorResource(id = R.color.teal_200),
+                    secondaryVariant = colorResource(id = R.color.teal_700),
+                ),
+                typography = MaterialTheme.typography,
+                shapes = MaterialTheme.shapes
+            ) {
+                MainScreen()
+            }
         }
 
         lifecycleScope.launch {

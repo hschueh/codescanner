@@ -42,7 +42,7 @@ fun HistoryScreen(
                 ) {
                     Text(
                         text = stringResource(R.string.no_history),
-                        style = MaterialTheme.typography.h6,
+                        style = MaterialTheme.typography.body1,
                     )
                 }
             }

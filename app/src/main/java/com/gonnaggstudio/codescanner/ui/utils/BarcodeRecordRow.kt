@@ -34,10 +34,10 @@ fun BarcodeRecordRow(
 ) {
     Column(
         modifier = modifier
-            .background(color = Color.White, shape = MaterialTheme.shapes.medium)
+            .background(color = MaterialTheme.colors.surface, shape = MaterialTheme.shapes.medium)
             .padding(8.dp)
     ) {
-        Text(text = label, style = MaterialTheme.typography.h5)
+        Text(text = label, style = MaterialTheme.typography.body1)
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -49,7 +49,7 @@ fun BarcodeRecordRow(
                     .clickable {
                         onCopy.invoke()
                     },
-                colorFilter = ColorFilter.tint(Color.Black),
+                colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_content_copy),
                 contentDescription = "Copy Url"
             )
@@ -60,7 +60,7 @@ fun BarcodeRecordRow(
                     .clickable {
                         onShare.invoke()
                     },
-                colorFilter = ColorFilter.tint(Color.Black),
+                colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_fullscreen),
                 contentDescription = "View Detail"
             )
@@ -71,7 +71,7 @@ fun BarcodeRecordRow(
                     .clickable {
                         onOpen.invoke()
                     },
-                colorFilter = ColorFilter.tint(Color.Black),
+                colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_open_in_new),
                 contentDescription = "Open Url"
             )
@@ -108,20 +108,13 @@ fun SwipeToDismissBarcodeRecord(
             DismissDirection.EndToStart
         ),
         dismissThresholds = {
-            FractionalThreshold(0.5f)
+            FractionalThreshold(0.15f)
         },
         background = {
             val color by animateColorAsState(
                 when (dismissState.targetValue) {
                     DismissValue.Default -> Color.White
                     else -> Color.Red
-                }
-            )
-
-            val iconColor by animateColorAsState(
-                when (dismissState.targetValue) {
-                    DismissValue.Default -> Color.White
-                    else -> Color.Black
                 }
             )
 
@@ -140,7 +133,7 @@ fun SwipeToDismissBarcodeRecord(
                     Icons.Default.Delete,
                     contentDescription = "Delete Icon",
                     modifier = Modifier.scale(scale),
-                    tint = iconColor
+                    tint = MaterialTheme.colors.onSurface
                 )
             }
         },
