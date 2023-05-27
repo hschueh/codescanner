@@ -8,4 +8,5 @@
     <string name="need_to_enabled_these">Need to enabled these two flags to make incognito mode work:\n - chrome://flags/#cct-incognito\n - chrome://flags/#cct-incognito-available-to-third-party\n (Click the above links to copy the url. Open it in Chrome)</string>
     <string name="clear_history">Clear History</string>
     <string name="open_web_in_incognito">Open web in incognito</string>
+    <string name="copied_to_clipboard">%s copied to clipboard</string>
 </resources>

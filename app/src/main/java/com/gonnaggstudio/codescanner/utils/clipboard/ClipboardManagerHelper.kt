@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
+import com.gonnaggstudio.codescanner.R
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -26,7 +27,7 @@ class ClipboardManagerHelper @Inject constructor(val context: Context) {
         clipboard.setPrimaryClip(clip)
         Toast.makeText(
             context,
-            "$text copied to clipboard",
+            context.getString(R.string.copied_to_clipboard, text),
             Toast.LENGTH_SHORT
         ).show()
     }

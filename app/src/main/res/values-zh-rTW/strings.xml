@@ -9,4 +9,5 @@
     <string name="need_to_enabled_these">需要啟用這兩個標誌才能使無痕模式正常運作：\n - chrome://flags/#cct-incognito\n - chrome://flags/#cct-incognito-available-to-third-party\n（點擊上面的連結以複製網址。在Chrome中開啟它）</string>
     <string name="clear_history">清除所有紀錄</string>
     <string name="open_web_in_incognito">在無痕模式開啟</string>
+    <string name="copied_to_clipboard">%s已複製到剪貼簿</string>
 </resources>
