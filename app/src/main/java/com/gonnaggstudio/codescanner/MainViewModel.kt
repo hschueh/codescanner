@@ -61,6 +61,12 @@ class MainViewModel @Inject constructor(
             UiAction.LinkCopied -> {
                 setLinkToCopy(null)
             }
+            is UiAction.ShareText -> {
+                setTextToShare(uiAction.text)
+            }
+            UiAction.TextShared -> {
+                setTextToShare(null)
+            }
         }
     }
 
@@ -122,6 +128,14 @@ class MainViewModel @Inject constructor(
         )
     }
 
+    private fun setTextToShare(text: String?) {
+        val state = uiEvent.value
+        if (text == state.textToShare) return
+        _uiEvent.value = state.copy(
+            textToShare = text
+        )
+    }
+
     sealed class UiAction {
         object BackToHomePage : UiAction()
         object GoToHistoryPage : UiAction()
@@ -136,6 +150,8 @@ class MainViewModel @Inject constructor(
         object BarcodeDetailPageOpened : UiAction()
         data class CopyLink(val url: String) : UiAction()
         object LinkCopied : UiAction()
+        data class ShareText(val text: String) : UiAction()
+        object TextShared : UiAction()
     }
 
     sealed class UiState {
@@ -151,6 +167,7 @@ class MainViewModel @Inject constructor(
         val barcodeToOpen: Barcode? = null,
         val barcodeToViewDetail: Barcode? = null,
         val linkToCopy: String? = null,
+        val textToShare: String? = null
     )
 
     companion object {

@@ -32,6 +32,11 @@ fun DetailScreen(
     LaunchedEffect(detailViewModel.detailArgs.id) {
         detailViewModel.onAction(DetailViewModel.UiAction.BarcodeDetailPageLaunched)
     }
+    LaunchedEffect(state.barcode?.url) {
+        state.barcode?.url?.let {
+            mainViewModel.onAction(MainViewModel.UiAction.ShareText(it))
+        }
+    }
 
     Column(
         modifier = Modifier.padding(16.dp),
@@ -68,6 +73,7 @@ fun DetailScreen(
                         .padding(4.dp)
                         .size(24.dp)
                         .clickable {
+                            mainViewModel.onAction(MainViewModel.UiAction.ShareText(barcode.url))
                         },
                     colorFilter = ColorFilter.tint(Color.Black),
                     imageVector = Icons.Default.Share,

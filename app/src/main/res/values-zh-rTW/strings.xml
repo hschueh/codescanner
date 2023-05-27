@@ -10,4 +10,5 @@
     <string name="clear_history">清除所有紀錄</string>
     <string name="open_web_in_incognito">在無痕模式開啟</string>
     <string name="copied_to_clipboard">%s已複製到剪貼簿</string>
+    <string name="share_using">選擇分享應用程式</string>
 </resources>

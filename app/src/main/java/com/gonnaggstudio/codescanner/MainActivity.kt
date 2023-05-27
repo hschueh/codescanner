@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.gonnaggstudio.codescanner.ui.MainScreen
 import com.gonnaggstudio.codescanner.utils.clipboard.ClipboardManagerHelper
+import com.gonnaggstudio.codescanner.utils.share.ShareHelper
 import com.gonnaggstudio.codescanner.utils.web.CustomTabUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -28,6 +29,9 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var clipboardManagerHelper: ClipboardManagerHelper
+
+    @Inject
+    lateinit var shareHelper: ShareHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,6 +80,10 @@ class MainActivity : AppCompatActivity() {
                         event.linkToCopy != null -> {
                             clipboardManagerHelper.copyText(event.linkToCopy)
                             mainViewModel.onAction(MainViewModel.UiAction.LinkCopied)
+                        }
+                        event.textToShare != null -> {
+                            shareHelper.shareText(event.textToShare)
+                            mainViewModel.onAction(MainViewModel.UiAction.TextShared)
                         }
                     }
                 }
