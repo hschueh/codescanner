@@ -10,4 +10,8 @@
     <string name="open_web_in_incognito">Open web in incognito</string>
     <string name="copied_to_clipboard">%s copied to clipboard</string>
     <string name="share_using">Share Using</string>
+    <string name="the_camera_is_important">The camera is important for this app. Please grant the permission.</string>
+    <string name="request_permission">Request Permission</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="camera_permission_required_for">Camera permission required for this feature to be available.\nPlease grant the permission</string>
 </resources>

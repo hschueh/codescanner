@@ -71,7 +71,7 @@ fun MainScreen(
                     composable(MainViewModel.NAVIGATION_HISTORY) { HistoryScreen() }
                     composable(MainViewModel.NAVIGATION_SETTINGS) { SettingsScreen() }
                     composable(
-                        "${MainViewModel.NAVIGATION_DETAIL}/{barcodeId}",
+                        route = "${MainViewModel.NAVIGATION_DETAIL}/{barcodeId}",
                         arguments = listOf(
                             navArgument("barcodeId") { type = NavType.IntType },
                         ),

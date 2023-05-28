@@ -18,16 +18,17 @@ class HomeViewModel @Inject constructor() : ViewModel() {
     val uiState: StateFlow<UiState> = _uiState
 
     fun onAction(uiAction: UiAction) {
-        val state = uiState.value
-        // Handle Scanning Only Action.
-        if (state is UiState.Scanning) {
-            when (uiAction) {
-                is UiAction.OnBarcodeReceived -> {
-                    onBarcodeReceived(
-                        uiAction.list.take(DISPLAYED_URL_COUNT).sortedBy { it.displayValue }
-                    )
+        when (uiState.value) {
+            is UiState.Scanning -> {
+                when (uiAction) {
+                    is UiAction.OnBarcodeReceived -> {
+                        onBarcodeReceived(
+                            uiAction.list.take(DISPLAYED_URL_COUNT).sortedBy { it.displayValue }
+                        )
+                    }
+                    UiAction.OnTorchClicked -> toggleTorch()
+                    else -> {}
                 }
-                UiAction.OnTorchClicked -> toggleTorch()
             }
         }
     }
@@ -57,10 +58,10 @@ class HomeViewModel @Inject constructor() : ViewModel() {
     sealed class UiAction {
         data class OnBarcodeReceived(val list: List<Barcode>) : UiAction()
         object OnTorchClicked : UiAction()
+        data class OnPermissionStateChanged(val isGranted: Boolean) : UiAction()
     }
 
     sealed class UiState {
-        object PermissionDenied : UiState()
         data class Scanning(
             val list: List<Barcode> = emptyList(),
             val isTorchEnabled: Boolean = false

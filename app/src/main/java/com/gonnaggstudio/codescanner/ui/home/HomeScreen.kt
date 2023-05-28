@@ -1,21 +1,26 @@
 package com.gonnaggstudio.codescanner.ui.home
 
+import android.Manifest
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gonnaggstudio.codescanner.MainViewModel
@@ -24,29 +29,44 @@ import com.gonnaggstudio.codescanner.ext.toBarcode
 import com.gonnaggstudio.codescanner.ui.scan.ScannerCompose
 import com.gonnaggstudio.codescanner.ui.scan.ScannerOverlay
 import com.gonnaggstudio.codescanner.ui.utils.hiltActivityViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionRequired
+import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.rememberPermissionState
 import com.google.mlkit.vision.barcode.common.Barcode
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun HomeScreen(
     homeViewModel: HomeViewModel = hiltViewModel(),
     mainViewModel: MainViewModel = hiltActivityViewModel()
 ) {
+    val permissionState = rememberPermissionState(permission = Manifest.permission.CAMERA)
+
+    LaunchedEffect(true) {
+        permissionState.launchPermissionRequest()
+    }
+
     val state: HomeViewModel.UiState by homeViewModel.uiState.collectAsState()
-    when (val fixedState = state) {
-        is HomeViewModel.UiState.Scanning -> {
-            HomeScreenScanning(
-                state = fixedState,
-                onBarcodeReceived = { homeViewModel.onAction(HomeViewModel.UiAction.OnBarcodeReceived(it)) },
-                onBarcodeClicked = {
-                    mainViewModel.onAction(MainViewModel.UiAction.OpenBarcodeLink(it.toBarcode()))
-                },
-                onTorchClicked = {
-                    homeViewModel.onAction(HomeViewModel.UiAction.OnTorchClicked)
-                }
-            )
-        }
-        is HomeViewModel.UiState.PermissionDenied -> {
-        }
+    PermissionRequired(
+        permissionState = permissionState,
+        permissionNotGrantedContent = { HomePermissionRequest(permissionState) },
+        permissionNotAvailableContent = { HomePermissionRequest(permissionState) }
+    ) {
+        HomeScreenScanning(
+            state = state as HomeViewModel.UiState.Scanning,
+            onBarcodeReceived = {
+                homeViewModel.onAction(
+                    HomeViewModel.UiAction.OnBarcodeReceived(it)
+                )
+            },
+            onBarcodeClicked = {
+                mainViewModel.onAction(MainViewModel.UiAction.OpenBarcodeLink(it.toBarcode()))
+            },
+            onTorchClicked = {
+                homeViewModel.onAction(HomeViewModel.UiAction.OnTorchClicked)
+            }
+        )
     }
 }
 
@@ -133,5 +153,47 @@ fun HomeScreenFooter(
                 )
             }
         }
+    }
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+fun HomePermissionRequest(
+    permissionState: PermissionState
+) {
+    val context = LocalContext.current
+    val textToShow = if (permissionState.shouldShowRationale) {
+        stringResource(R.string.the_camera_is_important)
+    } else {
+        stringResource(R.string.camera_permission_required_for)
+    }
+    val textOnButton = if (permissionState.shouldShowRationale) {
+        stringResource(R.string.request_permission)
+    } else {
+        stringResource(R.string.open_settings)
+    }
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = textToShow,
+            style = MaterialTheme.typography.body1,
+            textAlign = TextAlign.Center,
+        )
+        Button(
+            onClick = {
+                if (permissionState.shouldShowRationale) {
+                    permissionState.launchPermissionRequest()
+                } else {
+                    context.startActivity(
+                        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                            data = Uri.fromParts("package", context.packageName, null)
+                        }
+                    )
+                }
+            }
+        ) { Text(text = textOnButton) }
     }
 }

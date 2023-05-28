@@ -11,4 +11,8 @@
     <string name="open_web_in_incognito">在無痕模式開啟</string>
     <string name="copied_to_clipboard">%s已複製到剪貼簿</string>
     <string name="share_using">選擇分享應用程式</string>
+    <string name="the_camera_is_important">這個應用需要相機功能，請授予權限。</string>
+    <string name="request_permission">請求權限</string>
+    <string name="open_settings">開啟設定</string>
+    <string name="camera_permission_required_for">需要相機權限才能使用此功能。\n請授予權限。</string>
 </resources>
