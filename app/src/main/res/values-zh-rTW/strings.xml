@@ -15,4 +15,5 @@
     <string name="request_permission">請求權限</string>
     <string name="open_settings">開啟設定</string>
     <string name="camera_permission_required_for">需要相機權限才能使用此功能。\n請授予權限。</string>
+    <string name="additional_urls_have_been">其他網址已直接保存至您的歷史記錄中。</string>
 </resources>

@@ -14,4 +14,5 @@
     <string name="request_permission">Request Permission</string>
     <string name="open_settings">Open Settings</string>
     <string name="camera_permission_required_for">Camera permission required for this feature to be available.\nPlease grant the permission</string>
+    <string name="additional_urls_have_been">Additional URLs have been directly saved to your browsing history.</string>
 </resources>

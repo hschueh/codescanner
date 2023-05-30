@@ -87,7 +87,7 @@ fun HomeScreen(
                     MainViewModel.UiAction.SaveAndViewFirstBarcodeDetail(it.mapNotNull(Barcode::toBarcodeSafe))
                 )
                 if (it.size > 1) {
-                    Toast.makeText(context, "Other urls saved to history directly.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, context.getText(R.string.additional_urls_have_been), Toast.LENGTH_LONG).show()
                 }
             },
             onUriDetectionFinish = {
