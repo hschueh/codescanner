@@ -1,8 +1,10 @@
 package com.gonnaggstudio.codescanner.ui
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -10,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -64,9 +65,15 @@ fun MainScreen(
                 }
             )
         },
-        content = {
-            Box(modifier = Modifier.fillMaxSize()) {
-                NavHost(navController = navController, MainViewModel.NAVIGATION_HOME) {
+        content = { padding ->
+            Column(modifier = Modifier.padding(padding)) {
+                NavHost(
+                    navController = navController,
+                    startDestination = MainViewModel.NAVIGATION_HOME,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f)
+                ) {
                     composable(MainViewModel.NAVIGATION_HOME) { HomeScreen() }
                     composable(MainViewModel.NAVIGATION_HISTORY) { HistoryScreen() }
                     composable(MainViewModel.NAVIGATION_SETTINGS) { SettingsScreen() }
@@ -79,11 +86,7 @@ fun MainScreen(
                         DetailScreen()
                     }
                 }
-                BannerAds(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.BottomCenter)
-                )
+                BannerAds(Modifier.fillMaxWidth().animateContentSize())
             }
         }
     )

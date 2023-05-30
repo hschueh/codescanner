@@ -32,11 +32,13 @@ fun DetailScreen(
     LaunchedEffect(detailViewModel.detailArgs.id) {
         detailViewModel.onAction(DetailViewModel.UiAction.BarcodeDetailPageLaunched)
     }
+    /* TOO MANY LAUNCHED EFFECTS
     LaunchedEffect(state.barcode?.url) {
         state.barcode?.url?.let {
             mainViewModel.onAction(MainViewModel.UiAction.ShareText(it))
         }
     }
+    */
 
     Column(
         modifier = Modifier.padding(16.dp),

@@ -9,7 +9,7 @@ import com.gonnaggstudio.codescanner.db.entity.BarcodeEntity
 interface BarcodeDao {
 
     @Insert
-    suspend fun insert(barcodeEntity: BarcodeEntity)
+    suspend fun insert(barcodeEntity: BarcodeEntity): Long
 
     @Query("SELECT * FROM $BARCODE_TABLE ORDER BY scanned_at DESC")
     fun getAllBarcodesDescPaging(): PagingSource<Int, BarcodeEntity>

@@ -49,6 +49,9 @@ class MainViewModel @Inject constructor(
             is UiAction.ViewBarcodeDetail -> {
                 navigateToBarcodeDetail(uiAction.barcode)
             }
+            is UiAction.SaveAndViewFirstBarcodeDetail -> {
+                saveAndViewFirstBarcode(uiAction.barcodes)
+            }
             UiAction.BarcodeOpened -> {
                 onBarcodeOpened()
             }
@@ -102,6 +105,21 @@ class MainViewModel @Inject constructor(
         )
     }
 
+    private fun saveAndViewFirstBarcode(barcodes: List<Barcode>) {
+        if (barcodes.isEmpty()) return
+        viewModelScope.launch(Dispatchers.IO) {
+            val id = barcodeDao.insert(barcodes.first().toEntity()).toInt()
+            val event = uiEvent.value
+            val barcode = barcodes.first().copy(id = id)
+            if (barcode != event.barcodeToViewDetail) {
+                _uiEvent.value = event.copy(barcodeToViewDetail = barcode)
+            }
+            for (i in 1 until barcodes.size) {
+                barcodeDao.insert(barcodes[i].toEntity())
+            }
+        }
+    }
+
     private fun openUrlLink(url: String) {
         val state = uiEvent.value
         if (url == state.linkToOpen) return
@@ -145,6 +163,7 @@ class MainViewModel @Inject constructor(
         data class OpenBarcodeLink(val barcode: Barcode) : UiAction()
         data class OpenUrlLink(val url: String) : UiAction()
         data class ViewBarcodeDetail(val barcode: Barcode) : UiAction()
+        data class SaveAndViewFirstBarcodeDetail(val barcodes: List<Barcode>) : UiAction()
         object LinkOpened : UiAction()
         object BarcodeOpened : UiAction()
         object BarcodeDetailPageOpened : UiAction()

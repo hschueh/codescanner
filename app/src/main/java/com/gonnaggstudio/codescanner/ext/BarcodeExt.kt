@@ -20,6 +20,20 @@ fun MLKitBarcode.toBarcode(): Barcode = Barcode(
     lastInteractAt = System.currentTimeMillis()
 )
 
+fun MLKitBarcode.toBarcodeSafe(): Barcode? {
+    return if (rawBytes == null || url == null) {
+        null
+    } else {
+        Barcode(
+            id = 0,
+            barcodeValue = requireNotNull(rawBytes),
+            url = requireNotNull(url?.url),
+            scannedAt = System.currentTimeMillis(),
+            lastInteractAt = System.currentTimeMillis()
+        )
+    }
+}
+
 fun Barcode.toEntity(): BarcodeEntity = BarcodeEntity(
     id = id,
     barcodeValue = barcodeValue,
