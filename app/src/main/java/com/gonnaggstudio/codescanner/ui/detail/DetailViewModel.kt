@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,10 +34,12 @@ class DetailViewModel @Inject constructor(
             UiAction.BarcodeDetailPageLaunched -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     val barcode = barcodeDao.getBarcodeById(detailArgs.id)?.toBarcode()
-                    _uiState.value = _uiState.value.copy(
-                        barcode = barcode,
-                        bitmap = barcode?.encodeAsBitmap(),
-                    )
+                    _uiState.update {
+                        it.copy(
+                            barcode = barcode,
+                            bitmap = barcode?.encodeAsBitmap(),
+                        )
+                    }
                 }
             }
         }

@@ -2,10 +2,14 @@ package com.gonnaggstudio.codescanner.ui.home
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.mlkit.vision.barcode.common.Barcode
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,25 +35,34 @@ class HomeViewModel @Inject constructor() : ViewModel() {
         }
     }
     private fun onBarcodeReceived(barcodeList: List<Barcode>) {
-        val uiState = uiState.value
-        if (barcodeList == uiState.list) return
-        _uiState.value = uiState.copy(
-            list = barcodeList
-        )
+        if (barcodeList == uiState.value.list) return
+        viewModelScope.launch(Dispatchers.Default) {
+            _uiState.update {
+                it.copy(
+                    list = barcodeList
+                )
+            }
+        }
     }
 
     private fun toggleTorch() {
-        val uiState = uiState.value
-        _uiState.value = uiState.copy(
-            isTorchEnabled = !uiState.isTorchEnabled
-        )
+        viewModelScope.launch(Dispatchers.Default) {
+            _uiState.update {
+                it.copy(
+                    isTorchEnabled = !it.isTorchEnabled
+                )
+            }
+        }
     }
 
     private fun onImageSelected(uri: Uri?) {
-        val uiState = uiState.value
-        _uiState.value = uiState.copy(
-            imageUri = uri
-        )
+        viewModelScope.launch(Dispatchers.Default) {
+            _uiState.update {
+                it.copy(
+                    imageUri = uri
+                )
+            }
+        }
     }
 
     sealed class UiAction {

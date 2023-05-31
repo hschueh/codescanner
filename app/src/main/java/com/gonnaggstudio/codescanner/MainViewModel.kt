@@ -75,44 +75,59 @@ class MainViewModel @Inject constructor(
 
     private fun openBarcode(barcode: Barcode) {
         if (barcode == uiEvent.value.barcodeToOpen) return
-        _uiEvent.value = uiEvent.value.copy(
-            barcodeToOpen = barcode
-        )
+        viewModelScope.launch(Dispatchers.Default) {
+            _uiEvent.update {
+                it.copy(
+                    barcodeToOpen = barcode
+                )
+            }
+        }
         viewModelScope.launch(Dispatchers.IO) {
             barcodeDao.insert(barcode.toEntity())
         }
     }
 
     private fun onBarcodeOpened() {
-        _uiEvent.value = uiEvent.value.copy(
-            barcodeToOpen = null
-        )
+        viewModelScope.launch(Dispatchers.Default) {
+            _uiEvent.update {
+                it.copy(
+                    barcodeToOpen = null
+                )
+            }
+        }
     }
 
     private fun navigateToBarcodeDetail(barcode: Barcode) {
-        val event = uiEvent.value
-        if (barcode == event.barcodeToViewDetail) return
-        _uiEvent.value = event.copy(
-            barcodeToViewDetail = barcode
-        )
+        if (barcode == uiEvent.value.barcodeToViewDetail) return
+        viewModelScope.launch(Dispatchers.Default) {
+            _uiEvent.update {
+                it.copy(
+                    barcodeToViewDetail = barcode
+                )
+            }
+        }
     }
 
     private fun onBarcodeDetailPageOpened() {
-        val event = uiEvent.value
-        if (null == event.barcodeToViewDetail) return
-        _uiEvent.value = event.copy(
-            barcodeToViewDetail = null
-        )
+        if (null == uiEvent.value.barcodeToViewDetail) return
+        viewModelScope.launch(Dispatchers.Default) {
+            _uiEvent.update {
+                it.copy(
+                    barcodeToViewDetail = null
+                )
+            }
+        }
     }
 
     private fun saveAndViewFirstBarcode(barcodes: List<Barcode>) {
         if (barcodes.isEmpty()) return
         viewModelScope.launch(Dispatchers.IO) {
             val id = barcodeDao.insert(barcodes.first().toEntity()).toInt()
-            val event = uiEvent.value
             val barcode = barcodes.first().copy(id = id)
-            if (barcode != event.barcodeToViewDetail) {
-                _uiEvent.value = event.copy(barcodeToViewDetail = barcode)
+            if (barcode != uiEvent.value.barcodeToViewDetail) {
+                _uiEvent.update {
+                    it.copy(barcodeToViewDetail = barcode)
+                }
             }
             for (i in 1 until barcodes.size) {
                 barcodeDao.insert(barcodes[i].toEntity())
@@ -121,11 +136,14 @@ class MainViewModel @Inject constructor(
     }
 
     private fun openUrlLink(url: String) {
-        val state = uiEvent.value
-        if (url == state.linkToOpen) return
-        _uiEvent.value = state.copy(
-            linkToOpen = url
-        )
+        if (url == uiEvent.value.linkToOpen) return
+        viewModelScope.launch(Dispatchers.Default) {
+            _uiEvent.update {
+                it.copy(
+                    linkToOpen = url
+                )
+            }
+        }
         /* TODO: find and update lastInteractAt
         viewModelScope.launch(Dispatchers.IO) {
         }
@@ -133,25 +151,36 @@ class MainViewModel @Inject constructor(
     }
 
     private fun onLinkOpened() {
-        _uiEvent.value = uiEvent.value.copy(
-            linkToOpen = null
-        )
+        viewModelScope.launch(Dispatchers.Default) {
+            _uiEvent.update {
+                it.copy(
+                    linkToOpen = null
+                )
+            }
+        }
     }
 
     private fun setLinkToCopy(url: String?) {
-        val state = uiEvent.value
-        if (url == state.linkToCopy) return
-        _uiEvent.value = state.copy(
-            linkToCopy = url
-        )
+        if (url == uiEvent.value.linkToCopy) return
+        viewModelScope.launch(Dispatchers.Default) {
+            _uiEvent.update {
+                it.copy(
+                    linkToCopy = url
+                )
+            }
+        }
     }
 
     private fun setTextToShare(text: String?) {
         val state = uiEvent.value
         if (text == state.textToShare) return
-        _uiEvent.value = state.copy(
-            textToShare = text
-        )
+        viewModelScope.launch(Dispatchers.Default) {
+            _uiEvent.update {
+                it.copy(
+                    textToShare = text
+                )
+            }
+        }
     }
 
     sealed class UiAction {
